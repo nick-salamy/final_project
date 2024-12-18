@@ -38,8 +38,8 @@ public class DBConnect {
         }
     }
 
-    public ArrayList<DBCustomer> getCustomerData() {
-        String sql = "SELECT id, customerName, address, orderNumber FROM customer";
+    public ArrayList<DBCustomer> getCustomerData(int customerId) {
+        String sql = "SELECT id, customerName, address, orderNumber FROM customer WHERE id='" + customerId + "';";
         ArrayList<DBCustomer> customerList = new ArrayList<DBCustomer>();
 
         try(Connection con = DriverManager.getConnection(url)) {
@@ -60,8 +60,30 @@ public class DBConnect {
         return customerList;
     }
 
-    public ArrayList<DBOrder> getOrderData() {
-        String sql = "SELECT orderid, productone, producttwo, prodocutthree, customerid FROM orders";
+    // Overrode to avoid using 2 methods with different names for the same action
+    public ArrayList<DBCustomer> getCustomerData(String custName) {
+        String sql = "SELECT id, customerName, address, orderNumber FROM customer WHERE customerName='" + custName + "';";
+        ArrayList<DBCustomer> customerList = new ArrayList<DBCustomer>();
+
+        try (Connection con = DriverManager.getConnection(url)) {
+            Statement statement = con.createStatement();
+            ResultSet customers = statement.executeQuery(sql);
+
+            while (customers.next()) {
+                int id = customers.getInt("id");
+                String customerName = customers.getString("customerName");
+                String address = customers.getString("address");
+                int orderId = customers.getInt("orderNumber");
+                DBCustomer customer = new DBCustomer(id, customerName, address, orderId);
+                customerList.add(customer);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return customerList;
+    }
+    public ArrayList<DBOrder> getOrderData(int customerId) {
+        String sql = "SELECT orderid, productone, producttwo, prodocutthree, customerid FROM orders WHERE customerid='" + customerId +"';";
         ArrayList<DBOrder> orderList = new ArrayList<>();
 
         try(Connection con = DriverManager.getConnection(url)) {
