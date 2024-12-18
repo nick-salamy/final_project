@@ -45,7 +45,7 @@ public class Display {
                    System.out.println(customer);
                    System.out.println("Would you like to view order? (y/n)");
                    if(s.nextLine().equalsIgnoreCase("y")) {
-                       order = convertOne.getOrderFromDB(db, customer.getOrderNumber());
+                       order = convertOne.getOrderFromDB(db, customer.getOrderNumber(), customer.getId());
                        System.out.println(order);
                    }
                }
@@ -67,7 +67,7 @@ public class Display {
                     s.nextLine();
                     viewOrder = s.nextLine();
                     if(viewOrder.toLowerCase().equals("y")) {
-                       order =  convert.getOrderFromDB(db, customer.getOrderNumber());
+                       order =  convert.getOrderFromDB(db, customer.getOrderNumber(), customer.getId());
                        System.out.println(order);
                     }
 
